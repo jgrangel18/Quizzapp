@@ -3,7 +3,10 @@
     <div class="question-box-container">
 		<link rel="stylesheet" href="../test.css">			
 		<b-jumbotron>
-			<template slot="header">Animals Quizz</template>
+			
+			<template slot="header">
+			{{quizTitle}}
+			</template>
 
 			<template slot="lead">
 				{{currentQuestion.question}}
@@ -37,7 +40,7 @@
 				Next
 			</b-button>
 			<div class="Puntaje">
-				<h3> {{"Puntaje "+numCorrect+" / "+totalCorrect+":"+maximunQuestion()}}</h3>
+				<h3> {{"Puntaje "+numCorrect+" /"+"Pregunta#"+totalCorrect+":"+maximunQuestion()}}</h3>
 			</div>
 			
 		</b-jumbotron>
@@ -55,7 +58,8 @@ export default {
 		increment:Function,
 		maximunQuestion:Function,
 		totalCorrect:Number,
-		numCorrect:Number
+		numCorrect:Number,
+		quizTitle:Number,
 
 	},
 	data(){
@@ -155,6 +159,8 @@ export default {
 	// }
 	mounted (){
 		this.shuffleAnswers()
+		console.log('EL TITULO ES'+this.QuizTitle);
+		
 
 
 	}

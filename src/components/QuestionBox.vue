@@ -5,7 +5,7 @@
 		<b-jumbotron>
 			
 			<template slot="header">
-			{{quizTitle}}
+			<h1>{{quizTitle}} Quiz</h1>
 			</template>
 
 			<template slot="lead">
@@ -59,7 +59,7 @@ export default {
 		maximunQuestion:Function,
 		totalCorrect:Number,
 		numCorrect:Number,
-		quizTitle:Number,
+		quizTitle:String,
 
 	},
 	data(){
@@ -91,22 +91,13 @@ export default {
 			console.log("correct index" + this.correct_index);
 			console.log("ESCOGIDO" + this.answernum);
 			let isCorrect = false;
-
-
 			if (this.correct_index == this.answernum){
 				isCorrect= true;
-
 			}
 			this.increment(isCorrect);
 			this.answered = true;
-			this.maxques= this.maximunQuestion;
-			
-			
-
- 
+			this.maxques= this.maximunQuestion; 
 		},
-
-		
 		answeredclass:function(index){
 			let classanswer = '';
 			if (this.answered === true && this.correct_index === index){

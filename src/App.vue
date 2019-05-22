@@ -40,14 +40,20 @@
 						v-bind:maximunQuestion="maximunQuestion"
 						v-bind:totalCorrect="totalCorrect"
 						v-bind:numCorrect="numCorrect"
-            v-bind:quizTitle="quizTitle"
+						v-bind:quizTitle="quizTitle"
 						>
-						
-						
 					</QuestionBox>
 				</b-col>
 			</b-row>
 		</b-container>
+		<div>
+			<b-modal id="modal-correctanswer">
+        <div class="d-block">En hora Buena has escogido la Respuesta correcta</div>
+      </b-modal>
+      <b-modal id="modal-incorrectanswer">
+        <div class="d-block">La respuesta es Incorrecta  la Respuesta correcta esta marcada en verde.</div>
+      </b-modal>
+		</div>
 	</div>
 </template>
 
@@ -82,8 +88,31 @@ export default {
 				selectedDifficulty:null,
 				selectedNumber:null,
 				categories: [
+					{ value:9, text:'General Knowledge' },
+					{ value:10, text:'Books' },
+					{ value:11, text:'Film' },
+					{ value:12, text:'Music' },
+					{ value:13, text:'Musicals and theatres' },
+					{ value:14, text:'Television' },
+					{ value:15, text:'Videogames' },
+					{ value:16, text:'Board Games' },
+					{ value:17, text:'Science and Nature' },
+					{ value:18, text:'Computers' },
+					{ value:19, text:'Mathematics' },
 					{ value:20, text:'Mythology' },
-					{ value:21, text:'Sports' }
+					{ value:21, text:'Sports' },
+					{ value:22, text:'Geography' },
+					{ value:23, text:'History' },
+					{ value:24, text:'Politics' },
+					{ value:25, text:'Art' },
+					{ value:26, text:'Celebrities' },
+					{ value:27, text:'Animals' },
+					{ value:28, text:'Vechicles' },
+					{ value:29, text:'Comics' },
+					{ value:30, text:'Gadgets' },
+					{ value:31, text:'Anime and Manga' },
+					{ value:32, text:'Cartoon Animation' }
+
 				],
 				difficulty: [
 					{ value:'easy', text:'Easy' },
@@ -97,18 +126,22 @@ export default {
 	},
 	methods:{
 		nextQuestion:function(){
-			console.log ("ENTRE A LA FUNCION")
 			this.index=this.index+1;
 			console.log(this.index);
 		},
 		handleSubmit(){
-			console.log("HOLA ENTRE AL METODO");
-      this.quiz = !this.quiz;
-      this.questionary = !this.questionary;
-      this.quizTitle= this.formQuiz.selectedCategory;
+			this.quiz = !this.quiz;
+			this.questionary = !this.questionary;
+			let quizTitle2= this.formQuiz.categories.find(category => {
+				if (category.value==this.formQuiz.selectedCategory){
+					return category.text; 
+				}
+			})
+			this.quizTitle = quizTitle2.text;
+			//Returning the Name of the category
 			console.log(this.formQuiz.selectedDifficulty);
 			console.log(this.formQuiz.selectedCategory);
-      console.log(this.formQuiz.numberQuestions);
+            console.log(this.formQuiz.numberQuestions);
 			let routetoquiz = 'https://opentdb.com/api.php?amount='+this.formQuiz.selectedNumber+'&category='+this.formQuiz.selectedCategory+'&difficulty='+this.formQuiz.selectedDifficulty+'&type=multiple'; 
 			console.log(routetoquiz);
 			fetch(routetoquiz, {
@@ -118,12 +151,9 @@ export default {
 					return response.json();
 				})
 				.then ((jsonData) => {
-          this.questions = jsonData.results;
-          this.response_code= jsonData.response_code;
-          console.log(this.questions);
-          console.log('ESTA ES LA RESPUESTA'+this.response_code);
+					this.questions = jsonData.results;
+					this.response_code= jsonData.response_code;
 					this.display = true;
-					console.log("HOLA DISPLAY"+ this.display);
 					this.maximunquestions = (this.questions.length);
 				})
 		},
@@ -135,19 +165,28 @@ export default {
 		,
 		increment(isCorrect){
 			if (isCorrect){
-				this.numCorrect++;
-			}
+        this.numCorrect++;
+        this.correctModal();
+      }
+      else {
+        this.incorrectModal();
+      }
 			this.totalCorrect++;
 
 		},
 		maximunQuestion(){
 			return this.maximunquestions; 
 
-		}
-
-	},
+    },
+    correctModal() {
+      this.$root.$emit('bv::show::modal', 'modal-correctanswer', '#btnShow')
+    },
+    incorrectModal() {
+      this.$root.$emit('bv::show::modal', 'modal-incorrectanswer', '#btnShow')
+    }
+  },
+  
 	mounted(){
-		console.log("HELLO");
 	}
 }
 </script>
